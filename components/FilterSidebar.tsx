@@ -2,7 +2,7 @@ import React from "react";
 
 export default function FilterSidebar() {
   return (
-    <aside className="w-full max-w-xs p-4 pl-20 bg-white rounded-md space-y-6">
+    <aside className="w-full max-w-xs p-4 pl-20 bg-white rounded-md space-y-6 h-[85vh] overflow-auto">
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-semibold">Filters</h2>
         <button className="text-sm text-blue-600 hover:underline">Clear All</button>

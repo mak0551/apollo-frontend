@@ -3,7 +3,7 @@ import React from "react";
 
 export default function DoctorCard() {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between p-4 bg-white shadow-md rounded-lg max-w-4xl w-full h-fit">
+    <div className="flex flex-col md:flex-row items-center justify-between p-4 bg-white shadow-md rounded-lg max-w-3xl w-full h-fit">
       {/* Left - Doctor Info */}
       <div className="flex items-start gap-4 w-full md:w-2/3">
         {/* Doctor Image */}
