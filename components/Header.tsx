@@ -8,7 +8,7 @@ import { CgProfile } from "react-icons/cg";
 import { useState } from "react";
 
 interface HeaderProps {
-  onSearchChange: (query: string) => void;
+  onSearchChange?: (query: string) => void; // Made optional
 }
 
 export default function Header({ onSearchChange }: HeaderProps) {
@@ -17,7 +17,9 @@ export default function Header({ onSearchChange }: HeaderProps) {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
-    onSearchChange(query);
+    if (onSearchChange) {
+      onSearchChange(query); // Only call if provided
+    }
   };
 
   return (
@@ -37,11 +39,11 @@ export default function Header({ onSearchChange }: HeaderProps) {
           </div>
 
           <div className="flex flex-col gap-5">
-            <div className="flex items-center justify-between w-full ">
+            <div className="flex items-center justify-between w-full">
               {/* Location Selector */}
               <div className="flex-shrink-0 text-sm text-gray-700">
                 <span className="flex items-center justify-center gap-1">
-                  <span className=" text-xl">
+                  <span className="text-xl">
                     <GrLocation />
                   </span>
                   <span className="flex-col flex">
