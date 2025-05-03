@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import DoctorCard from "@/components/DoctorCard";
 import FilterSidebar from "@/components/FilterSidebar";
 import RightHero from "@/components/RightHero";
+import Header from "@/components/Header";
 
 // Define the shape of the doctor data
 interface Doctor {
@@ -27,8 +28,8 @@ interface Doctor {
     in_person: number;
   };
   image?: string;
-  languages?: string[]; // Added for language filter
-  facility?: string; // Added for facility filter
+  languages?: string[];
+  facility?: string;
 }
 
 // Define filter interface
@@ -50,8 +51,9 @@ export default function Home() {
     language: [],
     facility: [],
   });
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null); // Fixed type annotation
 
   // Fetch doctors on mount
   useEffect(() => {
@@ -82,9 +84,20 @@ export default function Home() {
     fetchDoctors();
   }, []);
 
-  // Apply filters whenever doctors or filters change
+  // Apply filters and search whenever doctors, filters, or searchQuery change
   useEffect(() => {
     let result = [...doctors];
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      result = result.filter(
+        (doctor) =>
+          doctor.name.toLowerCase().includes(query) ||
+          doctor.specialization.toLowerCase().includes(query) ||
+          doctor.clinic_name.toLowerCase().includes(query)
+      );
+    }
 
     // Mode of Consult
     if (filters.mode.length > 0 && filters.mode.length < 2) {
@@ -129,9 +142,7 @@ export default function Home() {
     // Language
     if (filters.language.length > 0) {
       result = result.filter((doctor) =>
-        filters.language.every((lang) =>
-          doctor.languages?.includes(lang)
-        )
+        filters.language.every((lang) => doctor.languages?.includes(lang))
       );
     }
 
@@ -143,7 +154,7 @@ export default function Home() {
     }
 
     setFilteredDoctors(result);
-  }, [doctors, filters]);
+  }, [doctors, filters, searchQuery]);
 
   // Handle filter changes
   const handleFilterChange = (filterType: keyof Filters, value: string) => {
@@ -165,6 +176,12 @@ export default function Home() {
       language: [],
       facility: [],
     });
+    setSearchQuery(""); // Clear search query as well
+  };
+
+  // Handle search query change
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
   };
 
   if (loading) {
@@ -176,22 +193,25 @@ export default function Home() {
   }
 
   return (
-    <main className="p-6 bg-white h-fit flex gap-6">
-      <FilterSidebar
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        onClearFilters={handleClearFilters}
-      />
-      <div className="w-3xl flex flex-col gap-3">
-        {filteredDoctors.length > 0 ? (
-          filteredDoctors.map((doctor) => (
-            <DoctorCard key={doctor._id} doctor={doctor} />
-          ))
-        ) : (
-          <p>No doctors found.</p>
-        )}
-      </div>
-      <RightHero />
-    </main>
+    <>
+      <Header onSearchChange={handleSearchChange} />
+      <main className="p-6 bg-white h-fit flex gap-6">
+        <FilterSidebar
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onClearFilters={handleClearFilters}
+        />
+        <div className="w-3xl flex flex-col gap-3">
+          {filteredDoctors.length > 0 ? (
+            filteredDoctors.map((doctor) => (
+              <DoctorCard key={doctor._id} doctor={doctor} />
+            ))
+          ) : (
+            <p>No doctors found.</p>
+          )}
+        </div>
+        <RightHero />
+      </main>
+    </>
   );
 }

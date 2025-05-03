@@ -1,10 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { GrLocation } from "react-icons/gr";
 import { LuSearch } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
+import { useState } from "react";
 
-export default function Header() {
+interface HeaderProps {
+  onSearchChange: (query: string) => void;
+}
+
+export default function Header({ onSearchChange }: HeaderProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    onSearchChange(query);
+  };
+
   return (
     <>
       <header className="border-b border-gray-200 py-2 bg-white fixed w-full top-0 z-50">
@@ -37,11 +52,13 @@ export default function Header() {
               </div>
 
               {/* Search Bar */}
-              <div className="flex-1 relative  max-w-2/3">
+              <div className="flex-1 relative max-w-2/3">
                 <input
                   type="text"
                   placeholder="Search Doctors, Specialties, Conditions etc."
                   className="w-full py-2 px-4 pl-10 border border-gray-200 bg-gray-100 text-black rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
                 />
                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
                   <LuSearch />
