@@ -1,8 +1,7 @@
-// components/DoctorCard.tsx
 import Image from "next/image";
 import React from "react";
 
-// Define the Doctor interface (can be moved to a shared types file)
+// Define the Doctor interface
 interface Doctor {
   _id: string;
   name: string;
@@ -24,6 +23,8 @@ interface Doctor {
     in_person: number;
   };
   image?: string;
+  languages?: string[];
+  facility?: string;
 }
 
 // Define the props type for DoctorCard
@@ -39,12 +40,11 @@ export default function DoctorCard({ doctor }: DoctorCardProps) {
         {/* Doctor Image */}
         <div className="min-w-[64px] h-[64px] relative rounded-full overflow-hidden">
           <Image
-            src="/profile.jpg" // Use doctor's image if available, else fallback
-            // src={doctor?.image || "/profile.jpg"} // Use doctor's image if available, else fallback
-            alt={doctor?.name}
+            src={ "/profile.jpg"} // Fallback to placeholder
+            alt={doctor.name}
             layout="fill"
             objectFit="cover"
-            className="w-full h-full "
+            className="w-full h-full"
           />
         </div>
 
@@ -71,27 +71,26 @@ export default function DoctorCard({ doctor }: DoctorCardProps) {
       <div className="flex flex-col md:flex-row gap-4 mt-4 md:mt-0 w-full">
         <div className="text-center flex flex-col gap-6 text-xs w-full">
           <p className="font-bold text-black text-lg">
-            ₹{doctor?.consultation_fees?.online}
+            ₹{doctor.consultation_fees?.online ?? "N/A"}
           </p>
           <button className="text-blue-600 border border-blue-600 px-4 py-1 rounded-md text-sm">
             Consult Online
             <br />
             <span className="text-xs text-gray-500">
-              Available in {doctor.availability.online} minute
+              Available in {doctor.availability.online ?? "N/A"} minute
             </span>
           </button>
         </div>
 
         <div className="text-center flex flex-col gap-6 text-xs w-full">
           <p className="font-bold text-black text-lg">
-            ₹{doctor?.consultation_fees?.in_person}
-          </p>{" "}
-          {/* Example: Double the fees for in-person visit */}
+            ₹{doctor.consultation_fees?.in_person ?? "N/A"}
+          </p>
           <button className="bg-blue-700 text-white px-4 py-1 rounded-md text-sm">
             Visit Doctor
             <br />
             <span className="text-xs text-white">
-              Available in {doctor.availability.in_person} minutes
+              Available in {doctor.availability.in_person ?? "N/A"} minutes
             </span>
           </button>
         </div>
