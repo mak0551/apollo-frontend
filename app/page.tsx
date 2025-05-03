@@ -60,7 +60,7 @@ export default function Home() {
     async function fetchDoctors() {
       try {
         const res = await fetch(
-          "http://localhost:4020/doctor/getall?page=1&limit=20",
+          "https://apollo-server-wjvc.onrender.com//doctor/getall?page=1&limit=20",
           {
             cache: "no-store",
           }
